@@ -1,4 +1,5 @@
 from isodate import parse_datetime, parse_duration
+import requests
 
 from solcast.base import Base
 
@@ -12,13 +13,14 @@ class RadiationEstimatedActuals(Base):
         self.longitude = longitude
         self.latest = kwargs.get('latest', False)
         self.estimated_actuals = None
+        self.requests_func = requests.get
 
         self.params = {'latitude': self.latitude, 'longitude': self.longitude}
 
         if self.latest:
             self.end_point = self.end_point + '/latest'
 
-        self._get(*args, **kwargs)
+        self._request('get', *args, **kwargs)
 
         if self.ok:
             self._generate_est_acts_dict()

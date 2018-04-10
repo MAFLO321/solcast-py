@@ -27,7 +27,7 @@ class PvPowerForecasts(Base):
             'loss_factor': self.loss_factor
         }
 
-        self._get(*args, **kwargs)
+        self._request('get', *args, **kwargs)
 
         if self.ok:
             self._generate_forecast_dict()

@@ -15,7 +15,7 @@ class RadiationForecasts(Base):
         self.params = {'latitude': self.latitude,
                        'longitude': self.longitude}
 
-        self._get(*args, **kwargs)
+        self._request('get', *args, **kwargs)
 
         if self.ok:
             self._generate_forecasts_dict()

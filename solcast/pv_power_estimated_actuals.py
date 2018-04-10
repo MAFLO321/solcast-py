@@ -31,7 +31,7 @@ class PvPowerEstimatedActuals(Base):
         if self.latest:
             self.end_point = self.end_point + '/latest'
 
-        self._get(*args, **kwargs)
+        self._request('get', *args, **kwargs)
 
         if self.ok:
             self._generate_est_acts_dict()
