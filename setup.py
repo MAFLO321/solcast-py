@@ -6,9 +6,9 @@ setup(name='solcast',
       url='https://github.com/cjtapper/solcast-py',
       author='Chris Tapper',
       author_email='cj.tapper@gmail.com',
-      packages=['solcast'],
+      packages=['solcast', 'solcast.utils'],
       install_requires=[
           'requests',
-          'isodate'
+          'isodate',
       ]
      )
