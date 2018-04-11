@@ -6,7 +6,7 @@ import requests
 
 from solcast import api_key
 
-_BASE_URL = 'http://api.solcast.com.au/'
+_BASE_URL = 'https://api.solcast.com.au/'
 
 
 class Base(object):
