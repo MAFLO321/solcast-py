@@ -15,10 +15,12 @@ class RadiationForecasts(Base):
 
         self.latitude = latitude
         self.longitude = longitude
+        self.hours = kwargs.get('hours')
         self.forecasts = None
 
         self.params = {'latitude' : self.latitude,
-                       'longitude' : self.longitude}
+                       'longitude' : self.longitude,
+                       'hours': self.hours}
 
         self._get(*args, **kwargs)
 
