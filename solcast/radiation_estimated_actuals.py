@@ -9,16 +9,20 @@ from solcast.base import Base
 
 class RadiationEstimatedActuals(Base):
 
-    end_point = 'radiation/estimated_actuals'
+    end_point = 'world_radiation/estimated_actuals'
 
     def __init__(self, latitude, longitude, *args, **kwargs):
 
         self.latitude = latitude
         self.longitude = longitude
+        self.hours = kwargs.get('hours')
         self.latest = kwargs.get('latest', False)
         self.estimated_actuals = None
 
-        self.params = {'latitude' : self.latitude, 'longitude' : self.longitude}
+        self.params = {'latitude' : self.latitude,
+                       'longitude' : self.longitude,
+                       'hours': self.hours
+                      }
 
         if self.latest:
             self.end_point = self.end_point + '/latest'

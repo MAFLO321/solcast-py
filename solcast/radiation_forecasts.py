@@ -9,7 +9,7 @@ from solcast.base import Base
 
 class RadiationForecasts(Base):
 
-    end_point = 'radiation/forecasts'
+    end_point = 'world_radiation/forecasts'
 
     def __init__(self, latitude, longitude, *args, **kwargs):
 
@@ -20,7 +20,8 @@ class RadiationForecasts(Base):
 
         self.params = {'latitude' : self.latitude,
                        'longitude' : self.longitude,
-                       'hours': self.hours}
+                       'hours': self.hours
+                      }
 
         self._get(*args, **kwargs)
 
