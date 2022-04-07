@@ -8,15 +8,15 @@ from solcast import api_key
 
 _BASE_URL = 'https://api.solcast.com.au/'
 
-class Base(object):
 
+class Base(object):
     throttled = False
     throttle_release = None
 
-    def _get(self, api_key=api_key, **kwargs):
+    def _request(self, method, api_key=api_key, **kwargs):
 
         if api_key == None:
-            raise TypeError('{type}() missing 1 required argument: \'api_key\''\
+            raise TypeError('{type}() missing 1 required argument: \'api_key\'' \
                             .format(type=type(self)))
 
         logger = logging.getLogger()
@@ -27,6 +27,8 @@ class Base(object):
         self.api_key = api_key
         self.rate_limited = kwargs.get('rate_limited', True)
         self.throttle_release_padding = kwargs.get('throttle_release_padding', 2)
+        self.data = kwargs.get('data', None)
+        self.headers = kwargs.get('headers', None)
 
         params = self.params.copy()
         params['format'] = 'json'
@@ -36,7 +38,7 @@ class Base(object):
         if self.rate_limited and Base.throttled and now < Base.throttle_release:
             sleep_time = int(Base.throttle_release - now +
                              self.throttle_release_padding)
-            logger.info('Solcast API rate limit reached. Waiting {seconds} seconds'.\
+            logger.info('Solcast API rate limit reached. Waiting {seconds} seconds'. \
                         format(seconds=sleep_time))
 
             time.sleep(sleep_time)
@@ -44,7 +46,8 @@ class Base(object):
 
         try:
 
-            r = requests.get(self.url, auth=(self.api_key, ''), params=params)
+            r = requests.request(method, self.url, auth=(self.api_key, ''),
+                                 params=params, data=self.data, headers=self.headers)
 
             if self.rate_limited and r.status_code == 429:
                 now = time.time()
@@ -54,12 +57,11 @@ class Base(object):
                     Base.throttle_release = float(Base.throttle_release)
 
                 sleep_time = int(Base.throttle_release - now + self.throttle_release_padding)
-                logger.info('HTTP status 429: Solcast API rate limit reached. Waiting {seconds} seconds'.\
+                logger.info('HTTP status 429: Solcast API rate limit reached. Waiting {seconds} seconds'. \
                             format(seconds=sleep_time))
 
                 time.sleep(sleep_time)
                 Base.throttled = False
-
 
             self.status_code = r.status_code
             self.url = r.url

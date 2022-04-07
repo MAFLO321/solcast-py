@@ -1,14 +1,9 @@
-from datetime import datetime, timedelta
-from urllib.parse import urljoin
-
 from isodate import parse_datetime, parse_duration
-import requests
 
 from solcast.base import Base
 
 
 class PvPowerForecasts(Base):
-
     end_point = 'pv_power/forecasts'
 
     def __init__(self, latitude, longitude, capacity, *args, **kwargs):
@@ -22,16 +17,17 @@ class PvPowerForecasts(Base):
         self.loss_factor = kwargs.get('loss_factor')
         self.forecasts = None
 
-        self.params = {'latitude' : self.latitude,
-                       'longitude' : self.longitude,
-                       'capacity' : self.capacity,
-                       'tilt' : self.tilt,
-                       'azimuth' : self.azimuth,
-                       'install_date' : self.install_date,
-                       'loss_factor' : self.loss_factor
-                      }
+        self.params = {
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'capacity': self.capacity,
+            'tilt': self.tilt,
+            'azimuth': self.azimuth,
+            'install_date': self.install_date,
+            'loss_factor': self.loss_factor
+        }
 
-        self._get(*args, **kwargs)
+        self._request('get', *args, **kwargs)
 
         if self.ok:
             self._generate_forecast_dict()
@@ -41,7 +37,6 @@ class PvPowerForecasts(Base):
         self.forecasts = []
 
         for forecast in self.content.get('forecasts'):
-
             # Convert period_end and period. All other fields should already be
             # the correct type
 
