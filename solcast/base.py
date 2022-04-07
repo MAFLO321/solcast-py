@@ -1,3 +1,4 @@
+import os as _os
 import logging
 import time
 from urllib.parse import urljoin
@@ -6,7 +7,7 @@ import requests
 
 from solcast import api_key
 
-_BASE_URL = 'https://api.solcast.com.au/'
+_BASE_URL = _os.getenv('SOLCAST_BASE_URL', 'https://api.solcast.com.au/')
 
 
 class Base(object):
