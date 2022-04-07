@@ -1,6 +1,5 @@
-from isodate import parse_datetime, parse_duration
-
 from solcast.base import Base
+from solcast.utils import generate_dict
 
 
 class RadiationEstimatedActuals(Base):
@@ -26,17 +25,4 @@ class RadiationEstimatedActuals(Base):
         self._request('get', *args, **kwargs)
 
         if self.ok:
-            self._generate_est_acts_dict()
-
-    def _generate_est_acts_dict(self):
-
-        self.estimated_actuals = []
-
-        for est_act in self.content.get('estimated_actuals'):
-            # Convert period_end and period. All other fields should already be
-            # the correct type
-
-            est_act['period_end'] = parse_datetime(est_act['period_end'])
-            est_act['period'] = parse_duration(est_act['period'])
-
-            self.estimated_actuals.append(est_act)
+            self.forecasts = generate_dict(self.content.get('estimated_actuals'))

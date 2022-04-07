@@ -1,6 +1,5 @@
-from isodate import parse_datetime, parse_duration
-
 from solcast.base import Base
+from solcast.utils import generate_dict
 
 
 class RadiationForecasts(Base):
@@ -22,16 +21,4 @@ class RadiationForecasts(Base):
         self._request('get', *args, **kwargs)
 
         if self.ok:
-            self._generate_forecasts_dict()
-
-    def _generate_forecasts_dict(self):
-
-        self.forecasts = []
-
-        for forecast in self.content.get('forecasts'):
-            # Convert period_end and period. All other fields should already be
-            # the correct type
-            forecast['period_end'] = parse_datetime(forecast['period_end'])
-            forecast['period'] = parse_duration(forecast['period'])
-
-            self.forecasts.append(forecast)
+            self.forecasts = generate_dict(self.content.get('forecasts'))
