@@ -4,7 +4,7 @@ from solcast.base import Base
 
 
 class PvPowerForecasts(Base):
-    end_point = 'pv_power/forecasts'
+    end_point = 'world_pv_power/forecasts'
 
     def __init__(self, latitude, longitude, capacity, *args, **kwargs):
 
@@ -15,6 +15,7 @@ class PvPowerForecasts(Base):
         self.azimuth = kwargs.get('azimuth')
         self.install_date = kwargs.get('install_date')
         self.loss_factor = kwargs.get('loss_factor')
+        self.hours = kwargs.get('hours')
         self.forecasts = None
 
         self.params = {
@@ -24,7 +25,8 @@ class PvPowerForecasts(Base):
             'tilt': self.tilt,
             'azimuth': self.azimuth,
             'install_date': self.install_date,
-            'loss_factor': self.loss_factor
+            'loss_factor': self.loss_factor,
+            'hours': self.hours
         }
 
         self._request('get', *args, **kwargs)
