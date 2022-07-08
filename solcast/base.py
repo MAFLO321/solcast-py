@@ -30,6 +30,7 @@ class Base(object):
         self.throttle_release_padding = kwargs.get('throttle_release_padding', 2)
         self.data = kwargs.get('data', None)
         self.headers = kwargs.get('headers', None)
+        self.timeout = kwargs.get('timeout', 10)
 
         params = self.params.copy()
         params['format'] = 'json'
@@ -47,8 +48,8 @@ class Base(object):
 
         try:
 
-            r = requests.request(method, self.url, auth=(self.api_key, ''),
-                                 params=params, data=self.data, headers=self.headers)
+            r = requests.request(method, self.url, auth=(self.api_key, ''), params=params,
+                                 data=self.data, headers=self.headers, timeout=self.timeout)
 
             if self.rate_limited and r.status_code == 429:
                 now = time.time()
